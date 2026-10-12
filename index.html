@@ -1,43 +1,627 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>个人简历</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft Yahei",sans-serif;}
-        body{background:#f4f6f8;color:#333;line-height:1.6;padding:30px;}
-        .container{max-width:800px;margin:0 auto;background:#fff;padding:40px;border-radius:12px;box-shadow:0 2px 12px #ddd;}
-        h1{text-align:center;color:#222;margin-bottom:10px;}
-        .info{text-align:center;color:#666;margin-bottom:30px;border-bottom:1px solid #eee;padding-bottom:20px;}
-        h2{border-left:4px solid #2478f5;padding-left:10px;margin:25px 0 15px;color:#2478f5;font-size:20px;}
-        ul{padding-left:20px;margin-bottom:10px;}
-        li{margin-bottom:8px;}
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>章燕 · 个人简历</title>
+<style>
+  :root {
+    --ink:       #eef2ff;
+    --ink-dim:   #d3dbf3;
+    --ink-soft:  #adbadd;
+    --neon:      #b06cff;
+    --neon-2:    #7c5cff;
+    --cyan:      #56c8ff;
+    --line:      rgba(150, 110, 255, 0.42);
+    --panel:     rgba(10, 8, 30, 0.34);
+    --panel-hi:  rgba(24, 18, 58, 0.52);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    min-height: 100%;
+    background: #05030f;
+    font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB",
+                 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--ink);
+    padding: 42px 24px 66px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ===== 星云 + 星空背景 ===== */
+  #sky {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    display: block;
+    pointer-events: none;
+  }
+
+  /* ===== 霓虹外框 ===== */
+  .frame {
+    position: relative;
+    z-index: 2;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 40px 42px 44px;
+    border-radius: 20px;
+    border: 1.5px solid var(--line);
+    background: rgba(9, 6, 28, 0.34);
+    backdrop-filter: blur(2.4px);
+    -webkit-backdrop-filter: blur(2.4px);
+    box-shadow:
+      0 0 18px rgba(150, 96, 255, 0.45),
+      0 0 60px rgba(118, 74, 255, 0.30),
+      0 0 140px rgba(88, 52, 220, 0.18),
+      0 0 0 1px rgba(190, 150, 255, 0.14) inset;
+  }
+
+  /* 月亮 */
+  .moon {
+    position: absolute;
+    top: 26px;
+    right: 34px;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 36% 32%, #ffffff 0%, #f0f2ff 40%, #cdd4f0 70%, #a9b2d8 100%);
+    box-shadow:
+      0 0 18px 5px rgba(226, 232, 255, 0.75),
+      0 0 52px 18px rgba(150, 130, 255, 0.42),
+      0 0 110px 50px rgba(110, 80, 255, 0.20);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* ===== 标题 ===== */
+  .title {
+    text-align: center;
+    font-size: clamp(34px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: #f6f2ff;
+    margin-bottom: 38px;
+    text-shadow:
+      0 0 6px  rgba(230, 210, 255, 0.95),
+      0 0 18px rgba(176, 108, 255, 0.95),
+      0 0 40px rgba(140, 80, 255, 0.85),
+      0 0 84px rgba(108, 60, 235, 0.60);
+  }
+  /* ===== 栅格 ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px 40px;
+  }
+
+  .card {
+    padding: 4px 2px;
+    transition: transform .3s ease;
+  }
+  .card:hover { transform: translateY(-3px); }
+
+  /* 卡片标题：左侧霓虹竖条 */
+  .card h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+    margin-bottom: 16px;
+    text-shadow: 0 0 14px rgba(168, 120, 255, 0.75), 0 0 30px rgba(120, 80, 255, 0.45);
+  }
+  .card h2::before {
+    content: "";
+    flex: none;
+    width: 4px;
+    height: 19px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #6ee7ff 0%, #7c5cff 55%, #b06cff 100%);
+    box-shadow: 0 0 10px rgba(120, 200, 255, 0.85), 0 0 22px rgba(150, 100, 255, 0.65);
+  }
+
+  .card p {
+    font-size: 14px;
+    line-height: 2;
+    color: var(--ink-dim);
+    letter-spacing: 0.015em;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  }
+
+  /* ===== 项目经历 ===== */
+  .item + .item { margin-top: 14px; }
+  .item-title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #e6ecff;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  }
+  .item-title .dot {
+    color: var(--neon);
+    font-size: 13px;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(176, 108, 255, 0.95);
+  }
+  .item p { font-size: 13.5px; line-height: 1.9; color: var(--ink-soft); }
+
+  /* ===== 技能栈 ===== */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+    margin-top: 2px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 6px 15px;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    border: 1px solid var(--tc, rgba(150, 170, 255, 0.45));
+    color: var(--tc, #cdd8ff);
+    background: rgba(12, 10, 34, 0.55);
+    text-shadow: 0 0 10px var(--tg, rgba(140, 170, 255, 0.55));
+    box-shadow: 0 0 12px var(--tg, rgba(120, 150, 255, 0.22));
+    transition: box-shadow .25s ease, background .25s ease;
+  }
+  .tag:hover { background: rgba(32, 22, 72, 0.75); box-shadow: 0 0 20px var(--tg, rgba(140, 170, 255, 0.5)); }
+
+  .t-violet { --tc: #c99cff; --tg: rgba(176, 108, 255, 0.60); }
+  .t-blue   { --tc: #7cc4ff; --tg: rgba(86, 168, 255, 0.55); }
+  .t-cyan   { --tc: #6ee7ff; --tg: rgba(80, 220, 255, 0.52); }
+  .t-green  { --tc: #7ef0b4; --tg: rgba(80, 230, 160, 0.50); }
+  .t-pink   { --tc: #ff9ad4; --tg: rgba(255, 120, 200, 0.50); }
+
+  /* ===== 联系方式 ===== */
+  .contact { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+  .contact li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--ink-dim);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  }
+  .contact .ico { font-size: 14px; line-height: 1; flex: none; }
+  .contact .k { color: var(--ink-soft); }
+  .contact a {
+    color: #cfd8ff;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(160, 140, 255, 0.45);
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .contact a:hover { color: #ffffff; border-bottom-color: #c9a8ff; }
+
+  /* ===== 角落星座线稿 ===== */
+  .constellation {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    opacity: .55;
+  }
+  .constellation path,
+  .constellation line {
+    fill: none;
+    stroke: rgba(206, 220, 255, 0.55);
+    stroke-width: 1;
+  }
+  .constellation circle { fill: rgba(226, 234, 255, 0.85); }
+  .c-tr { top: 8px;    right: 96px;  width: 190px; }
+  .c-bl { bottom: 6px; left: 4px;    width: 180px; }
+  .c-br { bottom: 26px; right: 6px;  width: 150px; }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 860px) {
+    body { padding: 26px 14px 48px; }
+    .frame { padding: 28px 20px 32px; border-radius: 16px; }
+    .grid { grid-template-columns: 1fr; gap: 26px; }
+    .moon { width: 42px; height: 42px; top: 16px; right: 18px; }
+    .title { letter-spacing: 0.08em; margin-bottom: 24px; }
+    .constellation { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card, .tag, .contact a { transition: none; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>章燕</h1>
-        <div class="info">
-            电话：19156582909 | 邮箱：1690087880@qq.com 
-        </div>
 
-        <h2>教育经历</h2>
-        <ul>
-            <li>广东科学技术职业学院 | 人工智能专业 | 2025.09 - 至今</li>
-        </ul>
+<canvas id="sky"></canvas>
 
-        <h2>专业技能</h2>
-        <ul>
-            <li>学习了python语法，HTML、CSS基础</li>
-        </ul>
+<main class="frame">
+  <div class="moon" aria-hidden="true"></div>
 
-        <h2>兴趣爱好</h2>
-        <ul>
-            <li>羽毛球</li>
-        </ul>
+  <svg class="constellation c-tr" viewBox="0 0 200 150" aria-hidden="true">
+    <line x1="18"  y1="118" x2="62"  y2="86" />
+    <line x1="62"  y1="86"  x2="96"  y2="104" />
+    <line x1="96"  y1="104" x2="132" y2="62" />
+    <line x1="132" y1="62"  x2="172" y2="44" />
+    <line x1="132" y1="62"  x2="118" y2="20" />
+    <line x1="62"  y1="86"  x2="54"  y2="34" />
+    <circle cx="18"  cy="118" r="2.6" />
+    <circle cx="62"  cy="86"  r="2.2" />
+    <circle cx="96"  cy="104" r="2.4" />
+    <circle cx="132" cy="62"  r="2.2" />
+    <circle cx="172" cy="44"  r="2.6" />
+    <circle cx="118" cy="20"  r="2" />
+    <circle cx="54"  cy="34"  r="2" />
+  </svg>
 
-        <h2>自我评价</h2>
-        <p>学习能力强，做事认真，对网页开发感兴趣，愿意持续学习前端相关技术。</p>
-    </div>
+  <svg class="constellation c-bl" viewBox="0 0 200 150" aria-hidden="true">
+    <line x1="14"  y1="40"  x2="58"  y2="66" />
+    <line x1="58"  y1="66"  x2="104" y2="52" />
+    <line x1="104" y1="52"  x2="150" y2="84" />
+    <line x1="104" y1="52"  x2="112" y2="14" />
+    <line x1="150" y1="84"  x2="186" y2="66" />
+    <line x1="58"  y1="66"  x2="66"  y2="118" />
+    <circle cx="14"  cy="40"  r="2.6" />
+    <circle cx="58"  cy="66"  r="2.2" />
+    <circle cx="104" cy="52"  r="2.4" />
+    <circle cx="150" cy="84"  r="2.2" />
+    <circle cx="112" cy="14"  r="2" />
+    <circle cx="186" cy="66"  r="2" />
+    <circle cx="66"  cy="118" r="2.4" />
+  </svg>
+
+  <svg class="constellation c-br" viewBox="0 0 200 150" aria-hidden="true">
+    <line x1="26"  y1="20"  x2="72"  y2="48" />
+    <line x1="72"  y1="48"  x2="120" y2="34" />
+    <line x1="120" y1="34"  x2="168" y2="70" />
+    <line x1="72"  y1="48"  x2="82"  y2="102" />
+    <circle cx="26"  cy="20"  r="2.6" />
+    <circle cx="72"  cy="48"  r="2.2" />
+    <circle cx="120" cy="34"  r="2.4" />
+    <circle cx="168" cy="70"  r="2.2" />
+    <circle cx="82"  cy="102" r="2.2" />
+  </svg>
+
+  <h1 class="title">个人简历</h1>
+
+  <div class="grid">
+
+    <!-- 个人简介 -->
+    <section class="card">
+      <h2>个人简介</h2>
+      <p>章燕，女，共青团员，广东科学技术职业学院计算机工程技术学院 25 大模型应用开发班在读学生，热爱编程、数据分析与可视化。熟悉 Python、HTML/CSS，掌握数学建模、可视化，拥有国赛建模项目经历。持续学习高数、离散数学，备考专升本，计划继续深造，目标从事计算机科研相关工作。善于团队协作，用代码解决实际问题。</p>
+    </section>
+
+    <!-- 竞赛经历 -->
+    <section class="card">
+      <h2>竞赛经历</h2>
+
+      <div class="item">
+        <div class="item-title"><span class="dot">✦</span>蓝桥杯全国软件和信息技术大赛（省级）</div>
+        <p>第十七届蓝桥杯数字科技创新赛·智能装备数字化建模（职业院校组全国选拔赛）三等奖。</p>
+      </div>
+
+      <div class="item">
+        <div class="item-title"><span class="dot">✦</span>2026 年高教社杯全国大学生数学建模比赛（省级）</div>
+        <p>使用 Python 搭建模型，完成数据清洗与可视化，撰写论文并参与答辩，获省级一等奖。</p>
+      </div>
+    </section>
+
+    <!-- 技能栈 -->
+    <section class="card">
+      <h2>技能栈</h2>
+      <div class="tags">
+        <span class="tag t-violet">Python</span>
+        <span class="tag t-cyan">HTML/CSS/JS</span>
+        <span class="tag t-blue">数据分析</span>
+        <span class="tag t-pink">Git</span>
+        <span class="tag t-violet">数学建模</span>
+      </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section class="card">
+      <h2>联系方式</h2>
+      <ul class="contact">
+        <li><span class="ico">📱</span><span class="k">电话：</span><span>19156582909</span></li>
+        <li><span class="ico">📧</span><span class="k">邮箱：</span><span>1690087880@qq.com</span></li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  const canvas = document.getElementById("sky");
+  const ctx = canvas.getContext("2d");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let W = 0, H = 0, dpr = 1;
+  let nebula = null, stars = [], meteors = [], rafId = null, last = 0;
+
+  function gauss() {
+    return ((Math.random() + Math.random() + Math.random()) - 1.5) / 1.5;
+  }
+
+  /* ---------- 一次性绘制星云底图 ---------- */
+  function paintNebula() {
+    const off = document.createElement("canvas");
+    off.width = Math.max(1, Math.floor(W * dpr));
+    off.height = Math.max(1, Math.floor(H * dpr));
+    const g = off.getContext("2d");
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // 基础渐层
+    const base = g.createLinearGradient(0, 0, W * 0.9, H);
+    base.addColorStop(0,    "#06041a");
+    base.addColorStop(0.38, "#0d0728");
+    base.addColorStop(0.72, "#150c3c");
+    base.addColorStop(1,    "#0a0624");
+    g.fillStyle = base;
+    g.fillRect(0, 0, W, H);
+
+    // 银河带轴线（左下 -> 右上）
+    const ax = W * 0.06, ay = H * 0.96, bx = W * 0.98, by = H * 0.04;
+    const dx = bx - ax, dy = by - ay;
+    const len = Math.hypot(dx, dy);
+    const px = -dy / len, py = dx / len;          // 垂直方向
+
+    const palette = [
+      "178,120,255", "120,96,255", "86,132,255",
+      "196,110,230", "150,150,255", "232,226,255"
+    ];
+
+    g.globalCompositeOperation = "lighter";
+
+    // 大面积底色云团（撑起整体紫调）
+    [
+      { x: W * 0.26, y: H * 0.16, r: H * 0.72, c: "128,72,240", a: 0.115 },
+      { x: W * 0.80, y: H * 0.74, r: H * 0.70, c: "70,96,235",  a: 0.105 },
+      { x: W * 0.52, y: H * 0.48, r: H * 0.80, c: "150,70,215", a: 0.075 },
+      { x: W * 0.08, y: H * 0.60, r: H * 0.56, c: "96,110,255", a: 0.085 }
+    ].forEach(function (c) {
+      const grd = g.createRadialGradient(c.x, c.y, 0, c.x, c.y, c.r);
+      grd.addColorStop(0,   "rgba(" + c.c + "," + c.a + ")");
+      grd.addColorStop(0.5, "rgba(" + c.c + "," + (c.a * 0.42).toFixed(3) + ")");
+      grd.addColorStop(1,   "rgba(" + c.c + ",0)");
+      g.fillStyle = grd;
+      g.beginPath();
+      g.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+      g.fill();
+    });
+
+    // 星云云气
+    const blobs = Math.round(Math.min(1500, Math.max(420, (W * H) / 1100)));
+    for (let i = 0; i < blobs; i++) {
+      const t = Math.random();
+      const spread = 0.42 + Math.sin(t * Math.PI) * 0.72;   // 中段最浓
+      const off1 = gauss() * H * 0.20;
+
+      const x = ax + dx * t + px * off1;
+      const y = ay + dy * t + py * off1;
+
+      const r = 26 + Math.random() * 165 * (0.6 + spread * 0.7);
+      const c = palette[(Math.random() * palette.length) | 0];
+      const a = (0.009 + 0.027 * Math.random()) * spread;
+
+      const grd = g.createRadialGradient(x, y, 0, x, y, r);
+      grd.addColorStop(0, "rgba(" + c + "," + a.toFixed(4) + ")");
+      grd.addColorStop(0.45, "rgba(" + c + "," + (a * 0.42).toFixed(4) + ")");
+      grd.addColorStop(1, "rgba(" + c + ",0)");
+      g.fillStyle = grd;
+      g.beginPath();
+      g.arc(x, y, r, 0, Math.PI * 2);
+      g.fill();
+    }
+
+    // 环境氛围光（两团）
+    const halos = [
+      { x: W * 0.88, y: H * 0.08, r: H * 0.62, c: "150,100,255", a: 0.15 },
+      { x: W * 0.08, y: H * 0.94, r: H * 0.58, c: "96,124,255", a: 0.14 }
+    ];
+    halos.forEach(function (h) {
+      const grd = g.createRadialGradient(h.x, h.y, 0, h.x, h.y, h.r);
+      grd.addColorStop(0, "rgba(" + h.c + "," + h.a + ")");
+      grd.addColorStop(1, "rgba(" + h.c + ",0)");
+      g.fillStyle = grd;
+      g.beginPath();
+      g.arc(h.x, h.y, h.r, 0, Math.PI * 2);
+      g.fill();
+    });
+
+    // 银河亮核
+    for (let i = 0; i < 90; i++) {
+      const t = 0.34 + Math.random() * 0.34;
+      const off1 = gauss() * H * 0.075;
+      const x = ax + dx * t + px * off1;
+      const y = ay + dy * t + py * off1;
+      const r = 14 + Math.random() * 60;
+      const a = 0.030 + Math.random() * 0.040;
+      const grd = g.createRadialGradient(x, y, 0, x, y, r);
+      grd.addColorStop(0, "rgba(246,242,255," + a.toFixed(4) + ")");
+      grd.addColorStop(1, "rgba(210,200,255,0)");
+      g.fillStyle = grd;
+      g.beginPath();
+      g.arc(x, y, r, 0, Math.PI * 2);
+      g.fill();
+    }
+
+    // 暗尘带，制造层次
+    g.globalCompositeOperation = "source-over";
+    for (let i = 0; i < 130; i++) {
+      const t = Math.random();
+      const off1 = gauss() * H * 0.13;
+      const x = ax + dx * t + px * off1;
+      const y = ay + dy * t + py * off1;
+      const r = 45 + Math.random() * 130;
+      const a = 0.03 + Math.random() * 0.07;
+      const grd = g.createRadialGradient(x, y, 0, x, y, r);
+      grd.addColorStop(0, "rgba(5,3,14," + a.toFixed(4) + ")");
+      grd.addColorStop(1, "rgba(5,3,14,0)");
+      g.fillStyle = grd;
+      g.beginPath();
+      g.arc(x, y, r, 0, Math.PI * 2);
+      g.fill();
+    }
+
+    // 亮星（带十字光晕）
+    g.globalCompositeOperation = "lighter";
+    const heroCount = Math.max(5, Math.round(W / 190));
+    for (let i = 0; i < heroCount; i++) {
+      const x = Math.random() * W;
+      const y = Math.random() * H;
+      const r = 0.9 + Math.random() * 1.3;
+
+      const grd = g.createRadialGradient(x, y, 0, x, y, r * 14);
+      grd.addColorStop(0, "rgba(255,255,255,0.85)");
+      grd.addColorStop(0.12, "rgba(210,224,255,0.40)");
+      grd.addColorStop(1, "rgba(150,180,255,0)");
+      g.fillStyle = grd;
+      g.beginPath();
+      g.arc(x, y, r * 14, 0, Math.PI * 2);
+      g.fill();
+
+      g.strokeStyle = "rgba(226,236,255,0.32)";
+      g.lineWidth = 0.8;
+      const L = r * 13;
+      g.beginPath();
+      g.moveTo(x - L, y); g.lineTo(x + L, y);
+      g.moveTo(x, y - L); g.lineTo(x, y + L);
+      g.stroke();
+    }
+
+    // 暗角
+    g.globalCompositeOperation = "source-over";
+    const vig = g.createRadialGradient(W * 0.5, H * 0.45, Math.min(W, H) * 0.18, W * 0.5, H * 0.5, Math.max(W, H) * 0.78);
+    vig.addColorStop(0, "rgba(0,0,0,0)");
+    vig.addColorStop(1, "rgba(0,0,0,0.52)");
+    g.fillStyle = vig;
+    g.fillRect(0, 0, W, H);
+
+    return off;
+  }
+
+  /* ---------- 闪烁星点 ---------- */
+  function buildStars() {
+    const n = Math.max(120, Math.min(420, Math.round((W * H) / 5200)));
+    stars = new Array(n).fill(0).map(function () {
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.15 + 0.3,
+        base: Math.random() * 0.42 + 0.26,
+        amp: Math.random() * 0.34 + 0.08,
+        phase: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.9 + 0.35
+      };
+    });
+  }
+
+  function drawStars(t) {
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      let a = s.base + Math.sin(t * 0.001 * s.speed + s.phase) * s.amp;
+      if (a < 0) a = 0; else if (a > 1) a = 1;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(235,242,255," + a.toFixed(3) + ")";
+      ctx.fill();
+    }
+  }
+
+  /* ---------- 流星 ---------- */
+  function spawnMeteor() {
+    meteors.push({
+      x: Math.random() * W * 0.85,
+      y: -40,
+      len: Math.random() * 130 + 110,
+      speed: Math.random() * 7 + 7,
+      alpha: 1
+    });
+  }
+
+  function drawMeteors() {
+    for (let i = meteors.length - 1; i >= 0; i--) {
+      const m = meteors[i];
+      const dx = m.len * 0.74, dy = m.len * 0.56;
+      const g = ctx.createLinearGradient(m.x, m.y, m.x - dx, m.y - dy);
+      g.addColorStop(0, "rgba(255,255,255," + (0.9 * m.alpha).toFixed(3) + ")");
+      g.addColorStop(0.32, "rgba(178,200,255," + (0.42 * m.alpha).toFixed(3) + ")");
+      g.addColorStop(1, "rgba(130,150,255,0)");
+      ctx.beginPath();
+      ctx.moveTo(m.x, m.y);
+      ctx.lineTo(m.x - dx, m.y - dy);
+      ctx.strokeStyle = g;
+      ctx.lineWidth = 1.6;
+      ctx.lineCap = "round";
+      ctx.stroke();
+
+      m.x += m.speed;
+      m.y += m.speed * 0.76;
+      m.alpha -= 0.008;
+
+      if (m.alpha <= 0 || m.y > H + 90 || m.x > W + 90) meteors.splice(i, 1);
+    }
+  }
+
+  /* ---------- 主循环 ---------- */
+  function loop(t) {
+    ctx.clearRect(0, 0, W, H);
+    if (nebula) ctx.drawImage(nebula, 0, 0, W, H);
+    drawStars(t);
+    drawMeteors();
+
+    if (t - last > 2800 + Math.random() * 2600) {
+      last = t;
+      if (meteors.length < 3) spawnMeteor();
+    }
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function rebuild() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = Math.floor(W * dpr);
+    canvas.height = Math.floor(H * dpr);
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    nebula = paintNebula();
+    buildStars();
+  }
+
+  rebuild();
+
+  if (reduce) {
+    ctx.clearRect(0, 0, W, H);
+    if (nebula) ctx.drawImage(nebula, 0, 0, W, H);
+    drawStars(600);
+  } else {
+    setTimeout(spawnMeteor, 1000);
+    rafId = requestAnimationFrame(loop);
+
+    let rt = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(rt);
+      rt = setTimeout(function () {
+        if (rafId) cancelAnimationFrame(rafId);
+        rebuild();
+        rafId = requestAnimationFrame(loop);
+      }, 180);
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
